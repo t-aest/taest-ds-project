@@ -1,2 +1,2 @@
 # taest-ds-project
-ds_ui
+ds_project
