@@ -1,269 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import {ref, onMounted} from "vue";
 import ItemDescription from "@/components/ItemDescription.vue";
+import axios from 'axios';
 const selectedValue = ref([])
-const options = [
-  {
-    value: '春季',
-    label: '春季',
-    children: [
-      {
-        value: '雨伞',
-        label: '雨伞',
-        children: [
-          {
-            value: '花伞',
-            label: '花伞',
-          },
-          {
-            value: '眼球伞',
-            label: '眼球伞',
-          }
-        ],
-      },
-      {
-        value: 'navigation',
-        label: 'Navigation',
-        children: [
-          {
-            value: 'side nav',
-            label: 'Side Navigation',
-          },
-          {
-            value: 'top nav',
-            label: 'Top Navigation',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: '夏季',
-    label: '夏季',
-    children: [
-      {
-        value: 'basic',
-        label: 'Basic',
-        children: [
-          {
-            value: 'layout',
-            label: 'Layout',
-          },
-          {
-            value: 'color',
-            label: 'Color',
-          },
-          {
-            value: 'typography',
-            label: 'Typography',
-          },
-          {
-            value: 'icon',
-            label: 'Icon',
-          },
-          {
-            value: 'button',
-            label: 'Button',
-          },
-        ],
-      },
-      {
-        value: 'form',
-        label: 'Form',
-        children: [
-          {
-            value: 'radio',
-            label: 'Radio',
-          },
-          {
-            value: 'checkbox',
-            label: 'Checkbox',
-          },
-          {
-            value: 'input',
-            label: 'Input',
-          },
-          {
-            value: 'input-number',
-            label: 'InputNumber',
-          },
-          {
-            value: 'select',
-            label: 'Select',
-          },
-          {
-            value: 'cascader',
-            label: 'Cascader',
-          },
-          {
-            value: 'switch',
-            label: 'Switch',
-          },
-          {
-            value: 'slider',
-            label: 'Slider',
-          },
-          {
-            value: 'time-picker',
-            label: 'TimePicker',
-          },
-          {
-            value: 'date-picker',
-            label: 'DatePicker',
-          },
-          {
-            value: 'datetime-picker',
-            label: 'DateTimePicker',
-          },
-          {
-            value: 'upload',
-            label: 'Upload',
-          },
-          {
-            value: 'rate',
-            label: 'Rate',
-          },
-          {
-            value: 'form',
-            label: 'Form',
-          },
-        ],
-      },
-      {
-        value: 'data',
-        label: 'Data',
-        children: [
-          {
-            value: 'table',
-            label: 'Table',
-          },
-          {
-            value: 'tag',
-            label: 'Tag',
-          },
-          {
-            value: 'progress',
-            label: 'Progress',
-          },
-          {
-            value: 'tree',
-            label: 'Tree',
-          },
-          {
-            value: 'pagination',
-            label: 'Pagination',
-          },
-          {
-            value: 'badge',
-            label: 'Badge',
-          },
-        ],
-      },
-      {
-        value: 'notice',
-        label: 'Notice',
-        children: [
-          {
-            value: 'alert',
-            label: 'Alert',
-          },
-          {
-            value: 'loading',
-            label: 'Loading',
-          },
-          {
-            value: 'message',
-            label: 'Message',
-          },
-          {
-            value: 'message-box',
-            label: 'MessageBox',
-          },
-          {
-            value: 'notification',
-            label: 'Notification',
-          },
-        ],
-      },
-      {
-        value: 'navigation',
-        label: 'Navigation',
-        children: [
-          {
-            value: 'menu',
-            label: 'Menu',
-          },
-          {
-            value: 'tabs',
-            label: 'Tabs',
-          },
-          {
-            value: 'breadcrumb',
-            label: 'Breadcrumb',
-          },
-          {
-            value: 'dropdown',
-            label: 'Dropdown',
-          },
-          {
-            value: 'steps',
-            label: 'Steps',
-          },
-        ],
-      },
-      {
-        value: 'others',
-        label: 'Others',
-        children: [
-          {
-            value: 'dialog',
-            label: 'Dialog',
-          },
-          {
-            value: 'tooltip',
-            label: 'Tooltip',
-          },
-          {
-            value: 'popover',
-            label: 'Popover',
-          },
-          {
-            value: 'card',
-            label: 'Card',
-          },
-          {
-            value: 'carousel',
-            label: 'Carousel',
-          },
-          {
-            value: 'collapse',
-            label: 'Collapse',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: '冬季',
-    label: '冬季',
-    children: [
-      {
-        value: 'axure',
-        label: 'Axure Components',
-      },
-      {
-        value: 'sketch',
-        label: 'Sketch Templates',
-      },
-      {
-        value: 'docs',
-        label: 'Design Documentation',
-      },
-    ],
-  }
-
-]
-
+const options = ref([]) //
+const itemDescriptionRef = ref(null) // 添加对子组件的引用
 // 处理选择变化
 const handleChange = (value) => {
 
@@ -275,8 +16,28 @@ const handleChange = (value) => {
   const path = value
   // 获取最后选中的值
   const lastValue = path[path.length - 1]
+  // 调用子组件的方法
+  if (itemDescriptionRef.value) {
+    itemDescriptionRef.value.updateItem(lastValue)
+  }
   console.log(lastValue)
 }
+
+// 获取选项数据的函数
+const fetchOptions = async () => {
+  try {
+    const response = await axios.get('/api/test/get') // 替换为你的实际API地址
+    options.value = response.data // 将接口返回的数据赋值给options
+  } catch (error) {
+    console.error('获取选项数据失败:', error)
+    // 可以在这里添加错误处理逻辑
+  }
+}
+
+// 在组件挂载时获取数据
+onMounted(() => {
+  fetchOptions()
+})
 </script>
 
 <template>
@@ -293,7 +54,7 @@ const handleChange = (value) => {
           @change = "handleChange"
       />
     </div>
-    <ItemDescription />
+    <ItemDescription ref="itemDescriptionRef" />
   </div>
 
 

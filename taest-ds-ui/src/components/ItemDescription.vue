@@ -1,58 +1,63 @@
 <script setup>
+import { ref } from 'vue'
 
+// 模拟数据
+const mockData = {
+  '眼球伞': {
+    name: '眼球伞',
+    code: 'sad',
+    type: '动植物',
+    image: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+    description: '这是一个眼球伞的描述...'
+  },
+  '花伞': {
+    name: '花伞',
+    code: 'flower',
+    type: '植物',
+    image: 'https://example.com/flower.png',
+    description: '这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...这是一个花伞的描述...'
+  }
+  // 可以添加更多物品数据
+}
+
+const itemData = ref({})
+
+// 暴露给父组件调用的方法
+const updateItem = (itemName) => {
+  if (mockData[itemName]) {
+    itemData.value = mockData[itemName]
+  } else {
+    itemData.value = {}
+  }
+}
+
+// 暴露方法给父组件
+defineExpose({
+  updateItem
+})
 </script>
 
 <template>
-  <el-descriptions title="Width horizontal list" border>
+  <el-descriptions v-if="itemData.name" :column="4" title="物品详情" border>
     <el-descriptions-item
-        :rowspan="2"
-        :width="140"
-        label="Photo"
-        align="center"
+        :span="2"
+        label="图片示例"
     >
       <el-image
-          style="width: 100px; height: 100px"
           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
       />
     </el-descriptions-item>
-    <el-descriptions-item label="Username">kooriookami</el-descriptions-item>
-    <el-descriptions-item label="Telephone">18100000000</el-descriptions-item>
-    <el-descriptions-item label="Place">Suzhou</el-descriptions-item>
-    <el-descriptions-item label="Remarks">
-      <el-tag size="small">School</el-tag>
+    <el-descriptions-item :span="2" label="名称">{{ itemData.name }}</el-descriptions-item>
+    <el-descriptions-item :span="1" label="作弊代码">{{ itemData.code }}</el-descriptions-item>
+    <el-descriptions-item :span="1" label="物品类型">
+      <el-tag size="small">{{ itemData.type }}</el-tag>
     </el-descriptions-item>
-    <el-descriptions-item label="Address">
-      No.1188, Wuzhong Avenue, Wuzhong District, Suzhou, Jiangsu Province
+    <el-descriptions-item :span="2" label="todo">todo</el-descriptions-item>
+    <el-descriptions-item :span="4" label="描述">
+      {{ itemData.description }}
     </el-descriptions-item>
   </el-descriptions>
 
-  <el-descriptions
-      title="Width vertical list"
-      direction="vertical"
-      border
-      style="margin-top: 20px"
-  >
-    <el-descriptions-item
-        :rowspan="2"
-        :width="140"
-        label="Photo"
-        align="center"
-    >
-      <el-image
-          style="width: 100px; height: 100px"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-      />
-    </el-descriptions-item>
-    <el-descriptions-item label="Username">kooriookami</el-descriptions-item>
-    <el-descriptions-item label="Telephone">18100000000</el-descriptions-item>
-    <el-descriptions-item label="Place">Suzhou</el-descriptions-item>
-    <el-descriptions-item label="Remarks">
-      <el-tag size="small">School</el-tag>
-    </el-descriptions-item>
-    <el-descriptions-item label="Address">
-      No.1188, Wuzhong Avenue, Wuzhong District, Suzhou, Jiangsu Province
-    </el-descriptions-item>
-  </el-descriptions>
 </template>
 
 <style scoped>
