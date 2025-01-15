@@ -7,9 +7,6 @@ const options = ref([]) //
 const itemDescriptionRef = ref(null) // 添加对子组件的引用
 // 处理选择变化
 const handleChange = (value) => {
-
-  console.log(value)
-  console.log(value[0])
   if (!value.length) return
 
   // 获取完整的选中路径
@@ -21,16 +18,29 @@ const handleChange = (value) => {
     itemDescriptionRef.value.updateItem(lastValue)
   }
   console.log(lastValue)
+  fetchItemDetail(lastValue)
 }
 
 // 获取选项数据的函数
 const fetchOptions = async () => {
   try {
-    const response = await axios.get('/api/test/get') // 替换为你的实际API地址
+    const response = await axios.get('/api/item/categoryList') // 替换为你的实际API地址
     options.value = response.data // 将接口返回的数据赋值给options
   } catch (error) {
     console.error('获取选项数据失败:', error)
     // 可以在这里添加错误处理逻辑
+  }
+}
+
+// 获取物品详情
+const fetchItemDetail = async (itemName) => {
+  try {
+    const response = await axios.get(`/api/item/${itemName}`)
+    if (itemDescriptionRef.value) {
+      itemDescriptionRef.value.updateItem(response.data)
+    }
+  } catch (error) {
+    console.error('获取物品详情失败:', error)
   }
 }
 

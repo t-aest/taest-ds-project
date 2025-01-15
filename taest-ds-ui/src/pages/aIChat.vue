@@ -235,10 +235,12 @@ const sendMessage = async () => {
 
     // 保存对话
     saveChatHistory()
-
+    console.log(currentChat.value.messages.length)
     // 更新对话标题
     if (currentChat.value.messages.length === 2) {
       currentChat.value.title = userInput.slice(0, 20) + (userInput.length > 20 ? '...' : '')
+      // 保存对话
+      saveChatHistory()
     }
 
   } finally {
@@ -248,7 +250,6 @@ const sendMessage = async () => {
 
 // 组件挂载时加载历史对话
 onMounted(() => {
-  console.log(OPENAI_API_KEY)
   loadChatHistory()
 })
 </script>

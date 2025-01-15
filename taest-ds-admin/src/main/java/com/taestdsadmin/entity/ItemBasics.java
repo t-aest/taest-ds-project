@@ -1,17 +1,23 @@
 package com.taestdsadmin.entity;
 
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Data
 @TableName("`item_basics`")
-public class ItemBasics {
+public class ItemBasics implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * id
      */
+    @TableId
     private int itemId;
 
     /**
@@ -30,7 +36,7 @@ public class ItemBasics {
     private String cheatCode;
 
     /**
-     * 物品类型  动植物、采集物、合成物
+     * 物品类型  0 动物、1 植物、2 拾取物、3 合成物
      */
     private Integer itemType;
 

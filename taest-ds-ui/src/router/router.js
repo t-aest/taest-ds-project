@@ -15,12 +15,8 @@ const routes = [
             },{
                 path: "chat", // 默认子路由
                 component: () => import("../pages/aIChat.vue")
-            },{
-                path: "chatp", // 默认子路由
-                component: () => import("../pages/ChatPlus.vue")
             }]
-    },
-    {path: "/wel", component: () => import("../components/TheWelcome.vue")},
+    }
 ];
 const router = createRouter({
     history: createWebHashHistory(),
